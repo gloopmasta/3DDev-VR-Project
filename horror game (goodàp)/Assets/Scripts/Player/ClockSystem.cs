@@ -6,13 +6,11 @@ using TMPro;
 
 public class ClockSystem : MonoBehaviour
 {
-    [SerializeField]private PlayerManager playerManager;
+    //[SerializeField]private PlayerManager playerManager;
 
     [SerializeField] private TextMeshProUGUI timeText;
-    //string time;
-    //bool dreaming;
+    
 
-    // Start is called before the first frame update
     void Start()
     {
         //timeText = FindObjectOfType<TextMeshProUGUI>();
@@ -38,16 +36,16 @@ public class ClockSystem : MonoBehaviour
         //}
     }
 
-    public void DisplayTime(bool isDreaming)
+    public void DisplayTime(PlayerState state)
     {
         Debug.Log("DisplayTime script called");
-        timeText.text = GenerateTime(isDreaming);
+        timeText.text = GenerateTime(state);
         StartCoroutine(TimeHold(2)); //See if I can put function above into the timehold thing for less lines
     }
 
-    string GenerateTime(bool dreaming)
+    string GenerateTime(PlayerState state)
     {
-        if (!dreaming)
+        if (state != PlayerState.Dreaming)
         {
             return Random.Range(0, 2).ToString() + Random.Range(0, 9).ToString() + ":" + Random.Range(0, 6).ToString() + Random.Range(0, 9);
         }

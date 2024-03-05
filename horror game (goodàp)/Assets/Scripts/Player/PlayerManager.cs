@@ -7,6 +7,28 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PlayerManager : MonoBehaviour
 {
+    //singleton
+    private PlayerManager() { }
+
+    private static PlayerManager _instance;
+
+    private static readonly object _lock = new object();
+
+    public static PlayerManager GetInstance()
+    {
+        if (_instance == null)
+        {
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = new PlayerManager();
+                }
+            }
+        }
+        return _instance;
+    }
+
     //Scripts
     [SerializeField] private ClockSystem clockScript;
     [SerializeField] private BatterySystem batteryScript;
@@ -16,9 +38,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] protected int _batteryLevel;
     [SerializeField] private int _medsCount;
     [SerializeField] private SphereCollider _sphereCollider;
-
-    //input
-    [SerializeField]XRController leftController;
+    [SerializeField] private PlayerState state;
     public int BatteryLevel
     {
         get{ return _batteryLevel; }
@@ -38,23 +58,6 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-
-    public bool isDreaming;
-
-    public bool isHallucinating;
-
-    public bool IsNormal
-    {
-        get
-        {
-            if (!isDreaming && !isHallucinating)
-            { 
-                return true; 
-            }
-            else { return false; }
-        }
-        }
-
     public int MedsCount
     {
         get { return _medsCount; }
@@ -71,44 +74,53 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    //public bool isDreaming;
+
+    //public bool isHallucinating;
+
+    //public bool IsNormal
+    //{
+    //    get
+    //    {
+    //        if (!isDreaming && !isHallucinating)
+    //        { 
+    //            return true; 
+    //        }
+    //        else { return false; }
+    //    }
+    //    }
+
+
+
     void Start()
     {
         //yButton.Enable();
         BatteryLevel = 5;
         MedsCount = 3;
-        isDreaming = false;
-        isHallucinating = false;
+        //isDreaming = false;
+        //isHallucinating = false;
+        state = PlayerState.AwakeAndSane;
 
         _sphereCollider.enabled = false;
     }
     
     void Update()
     {
-        //bool yButtonPressed = yButton.action.ReadValue<bool>();
-        if (leftController)
-        {
-            if (OVRInput.Get(OVRInput.Button.Three, OVRInput.Controller.LTouch))
-            {
-                Debug.Log("Y Pressed");
-            }
-        }
-        
-
         if (Input.GetKey(KeyCode.Mouse1))
         {
-            Debug.Log("M1 Pressed");
+            Debug.Log("M1 Pressed: checkwatch");
             CheckWatch();
         }
         if (Input.GetKey(KeyCode.Mouse2))
         {
-            Debug.Log("M2 Pressed Toggle dreamig");
-            isDreaming = !isDreaming;
+            Debug.Log("M2 Pressed enabled dreaming");
+            state = PlayerState.Dreaming;
         }
     }
 
     void CheckWatch()
     {
-        clockScript.DisplayTime(isDreaming);
+        clockScript.DisplayTime(state);
         StartCoroutine(SoundHitboxActivate());
         BatteryLevel--;
         batteryScript.UpdateBatteryLevel(BatteryLevel);
@@ -122,7 +134,7 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("hitbox disabled");
     }
 
-    void BatteryCollected()
+    public void BatteryCollected()
     {
         BatteryLevel++;
         batteryScript.UpdateBatteryLevel(BatteryLevel);
@@ -133,8 +145,37 @@ public class PlayerManager : MonoBehaviour
     {
         MedsCount--;
     }
-    void MedsCollected()
+    public void MedsCollected()
     {
+        Debug.Log("if something happens here thats good news");
         MedsCount++;
     }
+
+    //state switches
+    public void TakeMed()
+    {
+        switch (state)
+        {
+            case PlayerState.AwakeAndSane:
+                Debug.Log("You're not hallucinating, the medication had no effect!");
+                return;
+            case PlayerState.Dreaming:
+                Debug.Log("You're dreaming, the medication had no effect!");
+                return;
+            case PlayerState.Hallucinating:
+                Debug.Log("You're dreaming, the medication had no effect!");
+                return;
+        }
+    }
+    public void Stab()
+    {
+
+    }
+}
+
+public enum PlayerState
+{
+    AwakeAndSane,
+    Hallucinating,
+    Dreaming
 }
