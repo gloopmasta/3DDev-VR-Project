@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BatterySystem : MonoBehaviour
 {
-    [SerializeField] private PlayerManager _playerManager;
+    //[SerializeField] private PlayerManager _playerManager;
     [SerializeField] private TextMeshProUGUI batteryText;
     
 
