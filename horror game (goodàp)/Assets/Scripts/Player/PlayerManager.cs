@@ -34,6 +34,7 @@ public class PlayerManager : MonoBehaviour
     
     //Player variables
     [SerializeField] protected int _batteryLevel;
+    [SerializeField] protected int _pictureCount;
     [SerializeField] private int _medsCount;
     [SerializeField] private SphereCollider _sphereCollider;
     [SerializeField] private PlayerState state;
@@ -72,29 +73,15 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    //public bool isDreaming;
-
-    //public bool isHallucinating;
-
-    //public bool IsNormal
-    //{
-    //    get
-    //    {
-    //        if (!isDreaming && !isHallucinating)
-    //        { 
-    //            return true; 
-    //        }
-    //        else { return false; }
-    //    }
-    //    }
-
-
+    //input
+    [SerializeField] InputActionProperty pinchAnimationOnAction;
 
     void Start()
     {
         //yButton.Enable();
         BatteryLevel = 5;
         MedsCount = 2;
+        _pictureCount = 0;
         //isDreaming = false;
         //isHallucinating = false;
         state = PlayerState.AwakeAndSane;
@@ -115,7 +102,11 @@ public class PlayerManager : MonoBehaviour
             state = PlayerState.Dreaming;
         }
 
+        float triggervalue = pinchAnimationOnAction.action.ReadValue<float>();
+        if (triggervalue > 0.9)
+        {
 
+        }
     }
 
     void CheckWatch()
@@ -150,6 +141,11 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("if something happens here thats good news");
         //MedsCount++;
         _medsCount++;
+    }
+
+    public void PictureCollected()
+    {
+        _pictureCount++;
     }
 
     //state switches

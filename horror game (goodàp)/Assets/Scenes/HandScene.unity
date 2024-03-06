@@ -1659,9 +1659,22 @@ MonoBehaviour:
   clockScript: {fileID: 597722932}
   batteryScript: {fileID: 461972109}
   _batteryLevel: 0
+  _pictureCount: 0
   _medsCount: 0
   _sphereCollider: {fileID: 500911198}
   state: 0
+  pinchAnimationOnAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Pinch Animation On
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: cd5bb1f0-dd30-4a4f-8fb5-95ec32cdfb14
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
 --- !u!135 &500911198
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1695,8 +1708,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d40dd90c1fb99364180a686b1882bfc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: 1
-  pressYRaw: 0
 --- !u!1 &597722930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,6 +2172,7 @@ GameObject:
   - component: {fileID: 1065927977}
   - component: {fileID: 1065927976}
   - component: {fileID: 1065927978}
+  - component: {fileID: 1065927979}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2268,6 +2280,18 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &1065927979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065927975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40dd90c1fb99364180a686b1882bfc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1163991520
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,6 +2369,86 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1464845333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1325111443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1325111444}
+  - component: {fileID: 1325111445}
+  - component: {fileID: 1325111446}
+  m_Layer: 0
+  m_Name: pinch hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1325111444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325111443}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0024, y: 0, z: 0.0232}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1979150183}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1325111445
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325111443}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 0.02
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1325111446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325111443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d3cf7b36ad99204380619b6e3823982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pinchBox: {fileID: 1325111445}
+  pinchAnimationOnAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Pinch Animation On
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 17b8ce3b-e7be-4de6-ad21-a2c93d51b7b5
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
 --- !u!1 &1365199285 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ec7d38c119ff0bf43881088c1a772bad,
@@ -2509,7 +2613,7 @@ GameObject:
   - component: {fileID: 1535934772}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Watch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2544,11 +2648,11 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 2.25, y: 1.83, z: 1.31}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1535934773
 MeshRenderer:
@@ -8227,6 +8331,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2109743097}
+  - {fileID: 1325111444}
   m_Father: {fileID: 1816395148}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1979150184
@@ -9020,6 +9125,7 @@ GameObject:
   - component: {fileID: 3828321061084268982}
   - component: {fileID: 1352235411279445372}
   - component: {fileID: 3828321061084268984}
+  - component: {fileID: 3828321061084268986}
   - component: {fileID: 3828321061084268983}
   - component: {fileID: 3828321061084268985}
   m_Layer: 0
@@ -9042,7 +9148,7 @@ GameObject:
   - component: {fileID: 7180931585447962798}
   m_Layer: 0
   m_Name: Digital_Watch
-  m_TagString: Untagged
+  m_TagString: Watch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9150,10 +9256,34 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3828321061084268986}
+        m_TargetAssemblyTypeName: Picture, Assembly-CSharp
+        m_MethodName: TouchPicture
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3828321061084268986}
+        m_TargetAssemblyTypeName: Picture, Assembly-CSharp
+        m_MethodName: DeletePicture
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -9301,6 +9431,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1550514412580984892, guid: 90b44da7f0e534f4683f71e04a451275, type: 3}
+--- !u!114 &3828321061084268986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703940883915758761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc3cb366ee0d3734bbeb2ec157d8b840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!33 &5134458350985633940
 MeshFilter:
   m_ObjectHideFlags: 0
