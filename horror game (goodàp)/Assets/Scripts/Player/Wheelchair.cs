@@ -5,6 +5,7 @@ using UnityEngine;
 public class Wheelchair : MonoBehaviour
 {
     [SerializeField] private Transform xROriginTransform;
+    [SerializeField] private float yOffset;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +16,6 @@ public class Wheelchair : MonoBehaviour
     void Update()
     {
         //rotation of wheelchair is the same as the character
-        gameObject.transform.rotation = xROriginTransform.rotation;
+        gameObject.transform.rotation.SetEulerAngles(0, xROriginTransform.rotation.ToEuler().y+yOffset*Mathf.Deg2Rad, 0);
     }
 }

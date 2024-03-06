@@ -7,26 +7,24 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PlayerManager : MonoBehaviour
 {
-    //singleton
-    private PlayerManager() { }
-
-    private static PlayerManager _instance;
-
-    private static readonly object _lock = new object();
-
-    public static PlayerManager GetInstance()
+    private object lockThreadSafety = new object();
+    private static PlayerManager instance = null;
+    public static PlayerManager Instance
     {
-        if (_instance == null)
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        lock (lockThreadSafety)
         {
-            lock (_lock)
+            if (instance != null && instance != this)
             {
-                if (_instance == null)
-                {
-                    _instance = new PlayerManager();
-                }
+                Destroy(this.gameObject);
             }
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
-        return _instance;
     }
 
     //Scripts
@@ -96,7 +94,7 @@ public class PlayerManager : MonoBehaviour
     {
         //yButton.Enable();
         BatteryLevel = 5;
-        MedsCount = 3;
+        MedsCount = 2;
         //isDreaming = false;
         //isHallucinating = false;
         state = PlayerState.AwakeAndSane;
@@ -116,6 +114,8 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("M2 Pressed enabled dreaming");
             state = PlayerState.Dreaming;
         }
+
+
     }
 
     void CheckWatch()
@@ -148,7 +148,8 @@ public class PlayerManager : MonoBehaviour
     public void MedsCollected()
     {
         Debug.Log("if something happens here thats good news");
-        MedsCount++;
+        //MedsCount++;
+        _medsCount++;
     }
 
     //state switches

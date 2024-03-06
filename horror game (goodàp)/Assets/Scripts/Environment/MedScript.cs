@@ -5,13 +5,24 @@ using UnityEngine;
 public class MedScript : MonoBehaviour
 {
     PlayerManager manager;
+    Transform cameraTransform;
+
     private void Start()
     {
-        manager = PlayerManager.GetInstance();
+        manager = PlayerManager.Instance;
+        cameraTransform = Camera.main.transform;
     }
-    private void OnTriggerEnter(Collider other)
+
+    private void Update()
     {
-        manager.MedsCollected();
-        Debug.Log("Med collected");
+        float distance = Vector3.Distance(this.transform.position, cameraTransform.position);
+        Debug.Log(distance);
+
+        if (distance <= 0.2)
+        {
+            manager.MedsCollected();
+            Debug.Log("Med collected");
+            Destroy(gameObject);
+        }
     }
 }
