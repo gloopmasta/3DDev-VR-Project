@@ -8,25 +8,24 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class PlayerManager : MonoBehaviour
 {
     //singleton
-    private PlayerManager() { }
-
-    private static PlayerManager _instance;
-
-    private static readonly object _lock = new object();
-
-    public static PlayerManager GetInstance()
+    private object lockThreadSafety = new object();
+    private static PlayerManager instance = null;
+    public static PlayerManager Instance
     {
-        if (_instance == null)
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        lock (lockThreadSafety)
         {
-            lock (_lock)
+            if (instance != null && instance != this)
             {
-                if (_instance == null)
-                {
-                    _instance = new PlayerManager();
-                }
+                Destroy(this.gameObject);
             }
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
-        return _instance;
     }
 
     //Scripts
@@ -36,8 +35,9 @@ public class PlayerManager : MonoBehaviour
     
     //Player variables
     [SerializeField] protected int _batteryLevel;
-    [SerializeField] private int _medsCount;
-    [SerializeField] private SphereCollider _sphereCollider;
+    [SerializeField] public int pictureCount;
+    [SerializeField] public int medsCount;
+    [SerializeField] private SphereCollider sphereCollider;
     [SerializeField] private PlayerState state;
     public int BatteryLevel
     {
@@ -58,50 +58,19 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    public int MedsCount
-    {
-        get { return _medsCount; }
-        set
-        {
-            if (value < 0)
-            {
-                _medsCount = 0;
-            }
-            else
-            {
-                _medsCount = value;
-            }
-        }
-    }
+    
 
-    //public bool isDreaming;
-
-    //public bool isHallucinating;
-
-    //public bool IsNormal
-    //{
-    //    get
-    //    {
-    //        if (!isDreaming && !isHallucinating)
-    //        { 
-    //            return true; 
-    //        }
-    //        else { return false; }
-    //    }
-    //    }
-
-
+    //input
+    [SerializeField] InputActionProperty pinchAnimationOnAction;
 
     void Start()
     {
-        //yButton.Enable();
         BatteryLevel = 5;
-        MedsCount = 3;
-        //isDreaming = false;
-        //isHallucinating = false;
+        medsCount = 2;
+        pictureCount = 0;
         state = PlayerState.AwakeAndSane;
 
-        _sphereCollider.enabled = false;
+        sphereCollider.enabled = false;
     }
     
     void Update()
@@ -116,6 +85,17 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("M2 Pressed enabled dreaming");
             state = PlayerState.Dreaming;
         }
+
+        float triggervalue = pinchAnimationOnAction.action.ReadValue<float>();
+        if (triggervalue > 0.9)
+        {
+
+        }
+    }
+
+    public void Die()
+    {
+        GameManager.GetInstance().CalculateScore(pictureCount, medsCount, false);
     }
 
     void CheckWatch()
@@ -127,10 +107,10 @@ public class PlayerManager : MonoBehaviour
     }
     IEnumerator SoundHitboxActivate()
     {
-        _sphereCollider.enabled = true;
+        sphereCollider.enabled = true;
         Debug.Log("hitbox enabled");
         yield return new WaitForSeconds(2);
-        _sphereCollider.enabled = false;
+        sphereCollider.enabled = false;
         Debug.Log("hitbox disabled");
     }
 
@@ -143,12 +123,23 @@ public class PlayerManager : MonoBehaviour
 
     void MedsUsed()
     {
-        MedsCount--;
+        medsCount--;
     }
     public void MedsCollected()
     {
         Debug.Log("if something happens here thats good news");
-        MedsCount++;
+        //MedsCount++;
+        medsCount++;
+    }
+
+    public void PictureCollected()
+    {
+        pictureCount++;
+        if (pictureCount >= 1)
+        {
+            Debug.Log("Game won");
+            GameManager.GetInstance().CalculateScore(pictureCount, medsCount, true);
+        }
     }
 
     //state switches

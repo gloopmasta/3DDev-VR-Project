@@ -6,8 +6,8 @@ using static OVRInput;
 
 public class ButtonPress : MonoBehaviour
 {
-    [SerializeField] Controller _controller;
-    [SerializeField] bool pressYRaw;
+    //[SerializeField] Controller _controller;
+    //[SerializeField] bool pressYRaw;
     void Start()
     {
         
@@ -15,20 +15,21 @@ public class ButtonPress : MonoBehaviour
 
     void Update()
     {
-        if (OVRInput.Get(OVRInput.Button.One))
+        if (OVRInput.GetDown(OVRInput.Button.One))
         {
-            Debug.Log("Button 1 pressed");
+            Debug.Log("b1HET WERKT!!!!!!");
         }
-        if (OVRInput.Get(OVRInput.Button.Two))
+        if (OVRInput.GetDown(OVRInput.Button.Two))
         {
-            Debug.Log("Button 2 pressed");
+            Debug.Log("2HET WERKT!!!!!!");
         }
-
-        pressYRaw = OVRInput.Get(OVRInput.RawButton.Y);
-
-        if (pressYRaw)
+        if (OVRInput.GetDown(OVRInput.Button.Three))
         {
-            Debug.Log("Y pressed");
+            Debug.Log("3HET WERKT!!!!!!");
+        }
+        if (OVRInput.GetDown(OVRInput.Button.Four))
+        {
+            Debug.Log("4HET WERKT!!!!!!");
         }
     }
 }
