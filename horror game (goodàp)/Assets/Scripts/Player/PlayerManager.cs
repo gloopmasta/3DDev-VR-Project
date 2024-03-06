@@ -7,6 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PlayerManager : MonoBehaviour
 {
+    //singleton
     private object lockThreadSafety = new object();
     private static PlayerManager instance = null;
     public static PlayerManager Instance
@@ -34,9 +35,9 @@ public class PlayerManager : MonoBehaviour
     
     //Player variables
     [SerializeField] protected int _batteryLevel;
-    [SerializeField] protected int _pictureCount;
-    [SerializeField] private int _medsCount;
-    [SerializeField] private SphereCollider _sphereCollider;
+    [SerializeField] public int pictureCount;
+    [SerializeField] public int medsCount;
+    [SerializeField] private SphereCollider sphereCollider;
     [SerializeField] private PlayerState state;
     public int BatteryLevel
     {
@@ -57,36 +58,19 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    public int MedsCount
-    {
-        get { return _medsCount; }
-        set
-        {
-            if (value < 0)
-            {
-                _medsCount = 0;
-            }
-            else
-            {
-                _medsCount = value;
-            }
-        }
-    }
+    
 
     //input
     [SerializeField] InputActionProperty pinchAnimationOnAction;
 
     void Start()
     {
-        //yButton.Enable();
         BatteryLevel = 5;
-        MedsCount = 2;
-        _pictureCount = 0;
-        //isDreaming = false;
-        //isHallucinating = false;
+        medsCount = 2;
+        pictureCount = 0;
         state = PlayerState.AwakeAndSane;
 
-        _sphereCollider.enabled = false;
+        sphereCollider.enabled = false;
     }
     
     void Update()
@@ -109,6 +93,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void Die()
+    {
+        GameManager.GetInstance().CalculateScore(pictureCount, medsCount, false);
+    }
+
     void CheckWatch()
     {
         clockScript.DisplayTime(state);
@@ -118,10 +107,10 @@ public class PlayerManager : MonoBehaviour
     }
     IEnumerator SoundHitboxActivate()
     {
-        _sphereCollider.enabled = true;
+        sphereCollider.enabled = true;
         Debug.Log("hitbox enabled");
         yield return new WaitForSeconds(2);
-        _sphereCollider.enabled = false;
+        sphereCollider.enabled = false;
         Debug.Log("hitbox disabled");
     }
 
@@ -134,18 +123,23 @@ public class PlayerManager : MonoBehaviour
 
     void MedsUsed()
     {
-        MedsCount--;
+        medsCount--;
     }
     public void MedsCollected()
     {
         Debug.Log("if something happens here thats good news");
         //MedsCount++;
-        _medsCount++;
+        medsCount++;
     }
 
     public void PictureCollected()
     {
-        _pictureCount++;
+        pictureCount++;
+        if (pictureCount >= 1)
+        {
+            Debug.Log("Game won");
+            GameManager.GetInstance().CalculateScore(pictureCount, medsCount, true);
+        }
     }
 
     //state switches

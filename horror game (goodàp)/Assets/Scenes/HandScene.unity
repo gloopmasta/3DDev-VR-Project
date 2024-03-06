@@ -1659,9 +1659,9 @@ MonoBehaviour:
   clockScript: {fileID: 597722932}
   batteryScript: {fileID: 461972109}
   _batteryLevel: 0
-  _pictureCount: 0
-  _medsCount: 0
-  _sphereCollider: {fileID: 500911198}
+  pictureCount: 0
+  medsCount: 0
+  sphereCollider: {fileID: 0}
   state: 0
   pinchAnimationOnAction:
     m_UseReference: 0
@@ -2302,6 +2302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1163991522}
   - component: {fileID: 1163991521}
+  - component: {fileID: 1163991523}
   m_Layer: 0
   m_Name: XR Interaction Manager
   m_TagString: Untagged
@@ -2338,6 +2339,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1163991523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163991520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a581b9b3ab767f4380684f240ded36d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1302874364
 GameObject:
   m_ObjectHideFlags: 0

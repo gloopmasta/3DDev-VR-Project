@@ -25,12 +25,12 @@ public class WatchTouch : MonoBehaviour
         if (triggervalue > 0.9)
         {
             pinchBox.enabled = true;
-            Debug.Log("pinchbox enabled");
+            //Debug.Log("pinchbox enabled");
         }
         else
         {
             pinchBox.enabled = false;
-            Debug.Log("pinchbox disabled");
+            //Debug.Log("pinchbox disabled");
         }
     }
 
