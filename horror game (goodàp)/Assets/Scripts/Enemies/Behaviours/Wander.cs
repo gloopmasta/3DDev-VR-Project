@@ -40,4 +40,13 @@ public class Wander : MonoBehaviour
         currentTargetIndex = newIndex;
         agent.destination = targets[currentTargetIndex].position; // Set destination to a random waypoint
     }
+
+    private void OnDisable()
+    {
+        if (agent != null)
+        {
+            //Reset the NavMeshAgent's destination to stop movement
+            agent.destination = transform.position;
+        }
+    }
 }
