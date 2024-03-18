@@ -28,12 +28,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    //Scripts
+    
+    [Header("Scripts")]                                             //scripts
     [SerializeField] private ClockSystem clockScript;
     [SerializeField] private BatterySystem batteryScript;
-    
-    
-    //Player variables
+    [Space(10)]
+
+    [Header("Player Variables")]
     [SerializeField] protected int _batteryLevel;
     [SerializeField] public int pictureCount;
     [SerializeField] public int medsCount;
@@ -58,10 +59,11 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    
+    [Space(10)]
 
-    //input
-    [SerializeField] InputActionProperty pinchAnimationOnAction;
+    [Header("Zone system")]                                     //Zone Detection
+    [SerializeField] private List<string> currentZones;
+
 
     void Start()
     {
@@ -69,6 +71,8 @@ public class PlayerManager : MonoBehaviour
         medsCount = 2;
         pictureCount = 0;
         state = PlayerState.AwakeAndSane;
+
+        currentZones = new List<string>();
 
         sphereCollider.enabled = false;
     }
@@ -86,11 +90,26 @@ public class PlayerManager : MonoBehaviour
             state = PlayerState.Dreaming;
         }
 
-        float triggervalue = pinchAnimationOnAction.action.ReadValue<float>();
-        if (triggervalue > 0.9)
-        {
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Zone")) //If enter new zone
+        {
+            currentZones.Add(other.gameObject.name); //update current zone
+            Debug.Log($"{gameObject.name} entered zone: {currentZones[currentZones.Count - 1]}");
         }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Zone")) //If exit new zone
+        {
+            currentZones.Remove(other.gameObject.name); //Remove zone you just exited exitted?
+        }
+    }
+    public List<string> GetCurrentZones()
+    {
+        return currentZones;
     }
 
     public void Die()
