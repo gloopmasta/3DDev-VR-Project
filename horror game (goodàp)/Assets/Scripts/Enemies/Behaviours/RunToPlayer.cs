@@ -21,13 +21,23 @@ public class RunToPlayer : MonoBehaviour
             directionToPlayer.y = 0f; // Ignore vertical difference
 
             //Rotation
-            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); //smoothly rotate towards player
+
+            //Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); //smoothly rotate towards player
 
             //Move towards the player
             //transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
             agent.destination = player.position;
             agent.speed = runSpeed;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (agent != null)
+        {
+            //Reset the NavMeshAgent's destination to stop movement
+            agent.destination = transform.position;
         }
     }
 }
