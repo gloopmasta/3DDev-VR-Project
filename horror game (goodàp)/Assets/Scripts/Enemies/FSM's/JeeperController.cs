@@ -21,6 +21,9 @@ public class JeeperController : MonoBehaviour
     [SerializeField] private List<string> currentZones;
 
 
+    [SerializeField] float timeInterval = 1f;
+    private float timeSinceLastActivation = 0.0f;
+
     private void Start()
     {
         playerManager = PlayerManager.Instance;
@@ -35,17 +38,30 @@ public class JeeperController : MonoBehaviour
 
     private void Update()
     {
-        if (lockedOnToPlayer)
+        if (!lockedOnToPlayer)
+        {
+            timeSinceLastActivation += Time.deltaTime;//update timer
+
+            if (timeSinceLastActivation >= timeInterval)
+            {
+                CheckSameZone(); //check same zone every second
+                Debug.Log("I'm checking the area rn");
+                timeSinceLastActivation = 0.0f; //reset the times
+            }
+        }
+        else //if lockedontoplayer
         {
             RaycastHit hit;
 
+            Vector3 raycastOrigin = transform.position + Vector3.up; //transform of enemy + 1 unit up so it doesn't collide with the ground
+
             //raycast to player to see if enemy can see player
-            if (Physics.Raycast(transform.position, (player.position - transform.position).normalized, out hit))
+            if (Physics.Raycast(raycastOrigin, (player.position - transform.position).normalized, out hit))
             {
                 //check if the enemy can see the player
-                if (hit.collider.CompareTag("Player"))
+                if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("Zone")) //if he sees a zone or player act normal
                 {
-                    Debug.Log("The player is currently in the enemy's sight");
+                    Debug.Log("LOOKIGN AT PLAYER (look-nolook behaviours should be working rn)");
                     if (IsPlayerLookingAtEnemy()) //if the player is looking at the enemy
                     {
                         runToPlayerScript.enabled = false;
@@ -60,11 +76,14 @@ public class JeeperController : MonoBehaviour
                 }
                 else //if the raycast doesn't hit the player anymore
                 {
-                Debug.Log("The Enemy has lost sight of the player");
+                    Debug.Log($"The Enemy sees: {hit.collider.gameObject.name} RUNNING TO PLAYER");
+                    runToPlayerScript.enabled = true;
+                    freezeScript.enabled = false;
                 }
             }
-            
         }
+
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -112,17 +131,31 @@ public class JeeperController : MonoBehaviour
 
     private bool IsPlayerLookingAtEnemy()
     {
-        // Calculate direction from player to enemy
-        Vector3 directionToEnemy = transform.position - player.position;
+        if (player == null)
+        {
+            return false; // If player Transform is null, return false
+        }
 
-        // Calculate angle between direction to enemy and player's forward vector
-        float angleToEnemy = Vector3.Angle(player.forward, directionToEnemy);
+        // Get the player's camera
+        Camera playerCamera = player.GetComponentInChildren<Camera>();
+
+        if (playerCamera == null)
+        {
+            return false; // If camera is null, return false
+        }
+
+        // Calculate direction from player camera to enemy
+        Vector3 directionToEnemy = transform.position - playerCamera.transform.position;
+
+        // Calculate angle between direction to enemy and camera's forward vector
+        float angleToEnemy = Vector3.Angle(playerCamera.transform.forward, directionToEnemy);
 
         // Get the player's field of view angle
-        float playerFOV = player.GetComponentInChildren<Camera>().fieldOfView;
+        float playerFOV = playerCamera.fieldOfView;
 
         // Check if angle to enemy is within half of the player's FOV angle
         return angleToEnemy <= playerFOV * 0.5f;
     }
+
 
 }

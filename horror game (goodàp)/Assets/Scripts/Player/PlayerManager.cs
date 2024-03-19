@@ -99,6 +99,11 @@ public class PlayerManager : MonoBehaviour
             currentZones.Add(other.gameObject.name); //update current zone
             Debug.Log($"{gameObject.name} entered zone: {currentZones[currentZones.Count - 1]}");
         }
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("                                             player is krill");
+            GameManager.GetInstance().LoadScene("StartScene");
+        }
     }
     private void OnTriggerExit(Collider other)
     {
