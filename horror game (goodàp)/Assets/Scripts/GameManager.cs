@@ -27,9 +27,27 @@ public class GameManager : MonoBehaviour
         return _instance;
     }
 
+    [Header("Transforms")]
+    [SerializeField] Transform[] spawnPoints;
+    [SerializeField] Transform playerPos;
+    [SerializeField] float minimumSpawnDistance = 15f;
+
     public void LoadScene(string name)
     {
         SceneManager.LoadScene(name);
+    }
+
+    public Transform GenerateEnemySpawnPoint()
+    {
+        Transform randomSpawnPoint;
+        do
+        {
+            randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            Debug.Log($"distance was: {Vector3.Distance(playerPos.position, randomSpawnPoint.position)}   the cube: {randomSpawnPoint}");
+
+        } while (Vector3.Distance(playerPos.position, randomSpawnPoint.position) < minimumSpawnDistance);
+
+        return randomSpawnPoint;
     }
 
     public void CalculateScore(int picsCount, int medsCount, bool isAlive)

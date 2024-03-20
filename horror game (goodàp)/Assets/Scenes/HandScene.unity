@@ -3544,6 +3544,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brute
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8b13dbc8f38b4a44b834a5a23849e997,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 8b13dbc8f38b4a44b834a5a23849e997,
         type: 3}
       propertyPath: m_Avatar
@@ -3585,6 +3590,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5866666021269673651}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b13dbc8f38b4a44b834a5a23849e997,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5866666021269673657}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b13dbc8f38b4a44b834a5a23849e997,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5866666021269673658}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b13dbc8f38b4a44b834a5a23849e997,
         type: 3}
       insertIndex: -1
@@ -4150,6 +4163,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a581b9b3ab767f4380684f240ded36d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPoints:
+  - {fileID: 1107684727}
+  - {fileID: 725960030}
+  - {fileID: 738081940}
+  - {fileID: 1208940322}
+  - {fileID: 1054692516}
+  - {fileID: 663025655}
+  - {fileID: 563630451}
+  - {fileID: 741032409}
+  - {fileID: 1862199251}
+  - {fileID: 1956528272}
+  - {fileID: 971414293}
+  - {fileID: 1706357866}
+  - {fileID: 195181342}
+  - {fileID: 301697503}
+  - {fileID: 1650973991}
+  - {fileID: 105711287}
+  - {fileID: 1176210192}
+  - {fileID: 1855176596}
+  - {fileID: 1197765965}
+  - {fileID: 785238906}
+  - {fileID: 1929082048}
+  - {fileID: 190600072}
+  - {fileID: 658411851}
+  - {fileID: 938939699}
+  playerPos: {fileID: 500911192}
+  minimumSpawnDistance: 15
 --- !u!4 &1176210192 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5270064601047398356, guid: e8965e04f8d195944856f1305bfdbf7a,
@@ -13485,9 +13525,9 @@ NavMeshAgent:
   m_GameObject: {fileID: 919132148725683826}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Speed: 3.5
-  m_Acceleration: 5
+  m_Acceleration: 50
   avoidancePriority: 50
   m_AngularSpeed: 9999
   m_StoppingDistance: 0
@@ -13588,6 +13628,61 @@ MonoBehaviour:
   AccelSpeed: 50
   StoppingDistance: 1
   TurnSpeed: 1
+--- !u!114 &5866666021269673657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148725683826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bde1aab6ff027647b735a4847fc4ef7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runToNextPointScript: {fileID: 5866666021269673654}
+  countdownScript: {fileID: 5866666021269673658}
+  countdownTime: 2
+  spawnPoints:
+  - {fileID: 1107684727}
+  - {fileID: 725960030}
+  - {fileID: 738081940}
+  - {fileID: 1208940322}
+  - {fileID: 1054692516}
+  - {fileID: 663025655}
+  - {fileID: 563630451}
+  - {fileID: 741032409}
+  - {fileID: 1862199251}
+  - {fileID: 1956528272}
+  - {fileID: 971414293}
+  - {fileID: 1706357866}
+  - {fileID: 195181342}
+  - {fileID: 301697503}
+  - {fileID: 1650973991}
+  - {fileID: 105711287}
+  - {fileID: 1176210192}
+  - {fileID: 1855176596}
+  - {fileID: 1197765965}
+  - {fileID: 785238906}
+  - {fileID: 1929082048}
+  - {fileID: 190600072}
+  - {fileID: 658411851}
+  - {fileID: 938939699}
+  playerPos: {fileID: 500911192}
+  minimumSpawnDistance: 15
+--- !u!114 &5866666021269673658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148725683826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b963898b633f3a74f8a86bb7af76b1c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countdownTime: 2
 --- !u!4 &6704646078748535424
 Transform:
   m_ObjectHideFlags: 0
@@ -13952,9 +14047,9 @@ SceneRoots:
   - {fileID: 1163991522}
   - {fileID: 500911192}
   - {fileID: 231642257}
+  - {fileID: 778218275}
   - {fileID: 1464845333}
   - {fileID: 106368209}
   - {fileID: 1997623413}
   - {fileID: 184425678829782547}
   - {fileID: 2120713452}
-  - {fileID: 778218275}

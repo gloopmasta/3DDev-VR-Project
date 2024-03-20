@@ -65,4 +65,9 @@ public class RunToNextPoint : MonoBehaviour
         //agent.angularSpeed = TurnSpeed;
         agent.destination = targets[currentTargetIndex].position; // Set destination to a random waypoint
     }
+
+    private void OnDisable()
+    {
+        agent.destination = transform.position;
+    }
 }
