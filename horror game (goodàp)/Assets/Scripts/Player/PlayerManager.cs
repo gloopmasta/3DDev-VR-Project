@@ -35,39 +35,30 @@ public class PlayerManager : MonoBehaviour
     [Space(10)]
 
     [Header("Player Variables")]
-    [SerializeField] protected int _batteryLevel;
+    [SerializeField] private int batteryLevel;
     [SerializeField] public int pictureCount;
     [SerializeField] public int medsCount;
     [SerializeField] private SphereCollider sphereCollider;
     [SerializeField] private PlayerState state;
-    public int BatteryLevel
-    {
-        get{ return _batteryLevel; }
-        set
-        {
-            if (value < 0)
-            {
-                _batteryLevel = 0;
-            }
-            else if (value > 5)
-            {
-                _batteryLevel = 5;
-            }
-            else
-            {
-                _batteryLevel = value;
-            }
-        }
-    }
+    [Space(10)]
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject med;
+    [Space(10)]
+
+    [Header("Child objects")]
+    [SerializeField] GameObject rightHandMesh;
     [Space(10)]
 
     [Header("Zone system")]                                     //Zone Detection
     [SerializeField] private List<string> currentZones;
 
+    private bool watchActive = false;
+
 
     void Start()
     {
-        BatteryLevel = 5;
+        batteryLevel = 5;
         medsCount = 2;
         pictureCount = 0;
         state = PlayerState.AwakeAndSane;
@@ -79,16 +70,6 @@ public class PlayerManager : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKey(KeyCode.Mouse1))
-        {
-            Debug.Log("M1 Pressed: checkwatch");
-            CheckWatch();
-        }
-        if (Input.GetKey(KeyCode.Mouse2))
-        {
-            Debug.Log("M2 Pressed enabled dreaming");
-            state = PlayerState.Dreaming;
-        }
 
     }
 
@@ -124,10 +105,24 @@ public class PlayerManager : MonoBehaviour
 
     void CheckWatch()
     {
+        if (!watchActive && batteryLevel > 0)
+        {
+            StartCoroutine(WatchLogic());
+        }
+    }
+
+    IEnumerator WatchLogic()
+    {
+        watchActive = true;
+
         clockScript.DisplayTime(state);
-        StartCoroutine(SoundHitboxActivate());
-        BatteryLevel--;
-        batteryScript.UpdateBatteryLevel(BatteryLevel);
+        batteryLevel--;
+        batteryScript.UpdateBatteryLevel(batteryLevel);
+
+        yield return new WaitForSeconds(1);//wait A second
+
+        clockScript.ShutOffWatch();
+        watchActive = false;
     }
     IEnumerator SoundHitboxActivate()
     {
@@ -140,19 +135,15 @@ public class PlayerManager : MonoBehaviour
 
     public void BatteryCollected()
     {
-        BatteryLevel++;
-        batteryScript.UpdateBatteryLevel(BatteryLevel);
+        batteryLevel++;
+        batteryScript.UpdateBatteryLevel(batteryLevel);
     }
 
 
-    void MedsUsed()
-    {
-        medsCount--;
-    }
+    
     public void MedsCollected()
     {
         Debug.Log("if something happens here thats good news");
-        //MedsCount++;
         medsCount++;
     }
 
@@ -169,6 +160,8 @@ public class PlayerManager : MonoBehaviour
     //state switches
     public void TakeMed()
     {
+        medsCount--;
+
         switch (state)
         {
             case PlayerState.AwakeAndSane:
@@ -178,7 +171,8 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("You're dreaming, the medication had no effect!");
                 return;
             case PlayerState.Hallucinating:
-                Debug.Log("You're dreaming, the medication had no effect!");
+                Debug.Log("You're hallucinating, the medication worked!");
+                state = PlayerState.AwakeAndSane;
                 return;
         }
     }
@@ -186,6 +180,37 @@ public class PlayerManager : MonoBehaviour
     {
 
     }
+
+
+    private void OnLeftClick1()
+    {
+        Debug.Log("                                                                 AAAAAAAAAAAAleft click 1");
+        CheckWatch();
+    }
+    private void OnLeftClick2()
+    {
+        Debug.Log("                                                                 AAAAAAAAAAAAleft click 2");
+        CheckWatch();
+    }
+    private void OnRightClick1()
+    {
+        Debug.Log("                                                                 RIGHT click 1");
+    }
+    public void OnRightClick2Pressed()
+    {
+        if (medsCount > 0)
+        {
+            rightHandMesh.SetActive(false);
+            med.SetActive(true);
+        }
+    }
+
+    public void OnRightClick2Released()
+    {
+        rightHandMesh.SetActive(true);
+        med.SetActive(false);
+    }
+
 }
 
 public enum PlayerState

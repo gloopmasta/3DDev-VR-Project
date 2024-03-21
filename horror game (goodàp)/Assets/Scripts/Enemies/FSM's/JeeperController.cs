@@ -38,7 +38,7 @@ public class JeeperController : MonoBehaviour
 
     private void Update()
     {
-        if (!lockedOnToPlayer)
+        if (!lockedOnToPlayer) //check zones every second
         {
             timeSinceLastActivation += Time.deltaTime;//update timer
 
@@ -95,8 +95,6 @@ public class JeeperController : MonoBehaviour
 
             CheckSameZone();
         }
-
-        
     }
     private void OnTriggerExit(Collider other)
     {
