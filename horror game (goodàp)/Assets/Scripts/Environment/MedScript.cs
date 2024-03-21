@@ -20,9 +20,15 @@ public class MedScript : MonoBehaviour
 
         if (distance <= 0.2)
         {
-            manager.MedsCollected();
-            Debug.Log("Med collected");
+            manager.TakeMed();
+            Debug.Log("Med taken");
             Destroy(gameObject);
         }
+    }
+
+    public void MedLetGo()
+    {
+        manager.MedsCollected();
+        Destroy(gameObject);
     }
 }

@@ -20,27 +20,19 @@ public class ClockSystem : MonoBehaviour
         timeText.text = "";
     }
 
-    // Update is called once per frame
     void Update()
     { 
-        //Debug.Log(GenerateTime(true));
-        //dreaming = !dreaming;
-
-        //if (Input.GetKeyDown("up"))
-        //{
-        //    dreaming = !dreaming;
-        //}
-        //if (Input.GetKey("down"))
-        //{
-        //    timeText.text = GenerateTime(playerManager.isDreaming);
-        //}
     }
 
     public void DisplayTime(PlayerState state)
     {
-        Debug.Log("DisplayTime script called");
         timeText.text = GenerateTime(state);
-        StartCoroutine(TimeHold(2)); //See if I can put function above into the timehold thing for less lines
+        //StartCoroutine(TimeHold(2)); //See if I can put function above into the timehold thing for less lines
+    }
+
+    public void ShutOffWatch()
+    {
+        timeText.text = "";
     }
 
     string GenerateTime(PlayerState state)

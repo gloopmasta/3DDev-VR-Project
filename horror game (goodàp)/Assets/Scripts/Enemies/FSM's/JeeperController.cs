@@ -9,47 +9,96 @@ public class JeeperController : MonoBehaviour
     [Header("Behaviour Scripts")]
     [SerializeField] Wander wanderScript;
     [SerializeField] RunToPlayer runToPlayerScript;
+    [SerializeField] Freeze freezeScript;
     [Space(10)]
 
-    [Header("Raycast")]
+    [Header("idk")]
     [SerializeField] Transform player;
+    [SerializeField] bool lockedOnToPlayer;
     [Space(10)]
 
     [Header("Zone system")]                                     //Zone Detection
     [SerializeField] private List<string> currentZones;
 
 
+    [SerializeField] float timeInterval = 1f;
+    private float timeSinceLastActivation = 0.0f;
+
     private void Start()
     {
         playerManager = PlayerManager.Instance;
         currentZones = new List<string>();
 
+        lockedOnToPlayer = false;
 
         wanderScript.enabled = true;
         runToPlayerScript.enabled = false;
+        freezeScript.enabled = false;
     }
 
     private void Update()
     {
-        if (IsPlayerLookingAtEnemy() && runToPlayerScript.enabled)
+        if (!lockedOnToPlayer) //check zones every second
         {
-            Debug.Log("Player is looking at the enemy");
+            timeSinceLastActivation += Time.deltaTime;//update timer
+
+            if (timeSinceLastActivation >= timeInterval)
+            {
+                CheckSameZone(); //check same zone every second
+                Debug.Log("I'm checking the area rn");
+                timeSinceLastActivation = 0.0f; //reset the times
+            }
         }
+        else //if lockedontoplayer
+        {
+            RaycastHit hit;
+
+            Vector3 raycastOrigin = transform.position + Vector3.up; //transform of enemy + 1 unit up so it doesn't collide with the ground
+
+            //raycast to player to see if enemy can see player
+            if (Physics.Raycast(raycastOrigin, (player.position - transform.position).normalized, out hit))
+            {
+                //check if the enemy can see the player
+                if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("Zone")) //if he sees a zone or player act normal
+                {
+                    Debug.Log("LOOKIGN AT PLAYER (look-nolook behaviours should be working rn)");
+                    if (IsPlayerLookingAtEnemy()) //if the player is looking at the enemy
+                    {
+                        runToPlayerScript.enabled = false;
+                        freezeScript.enabled = true;
+                    }
+                    else
+                    {
+                        runToPlayerScript.enabled = true;
+                        freezeScript.enabled = false;
+                    }
+
+                }
+                else //if the raycast doesn't hit the player anymore
+                {
+                    Debug.Log($"The Enemy sees: {hit.collider.gameObject.name} RUNNING TO PLAYER");
+                    runToPlayerScript.enabled = true;
+                    freezeScript.enabled = false;
+                }
+            }
+        }
+
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Zone")) //If enter new zone
+        if (other.CompareTag("Zone") && !lockedOnToPlayer) //If enter new zone and NOT LOCKED ON
         {
             currentZones.Add(other.gameObject.name); //update current zone
             Debug.Log($"{gameObject.name} entered zone: {currentZones[currentZones.Count - 1]}");
-        }
 
-        CheckSameZone();
+            CheckSameZone();
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Zone")) //If exit  zone
+        if (other.CompareTag("Zone") && !lockedOnToPlayer) //If exit  zone AND NOT LOCKED ON
         {
             currentZones.Remove(other.gameObject.name); //Remove zone you just exited exitted?
         }
@@ -63,11 +112,13 @@ public class JeeperController : MonoBehaviour
             {
                 if (enemyZone == playerZone) //if any of the zones the player is in are equal to any of the zones the enemy is in
                 {
-                    Debug.Log("We're in the same zone rn, ... I might just touch you...");
+                    //Debug.Log("Enemy and player in the same zone");
 
                     //Enable run script
                     wanderScript.enabled = false;
                     runToPlayerScript.enabled = true;
+
+                    lockedOnToPlayer = true;
 
                     return true;
                 }
@@ -78,17 +129,31 @@ public class JeeperController : MonoBehaviour
 
     private bool IsPlayerLookingAtEnemy()
     {
-        // Calculate direction from player to enemy
-        Vector3 directionToEnemy = transform.position - player.position;
+        if (player == null)
+        {
+            return false; // If player Transform is null, return false
+        }
 
-        // Calculate angle between direction to enemy and player's forward vector
-        float angleToEnemy = Vector3.Angle(player.forward, directionToEnemy);
+        // Get the player's camera
+        Camera playerCamera = player.GetComponentInChildren<Camera>();
+
+        if (playerCamera == null)
+        {
+            return false; // If camera is null, return false
+        }
+
+        // Calculate direction from player camera to enemy
+        Vector3 directionToEnemy = transform.position - playerCamera.transform.position;
+
+        // Calculate angle between direction to enemy and camera's forward vector
+        float angleToEnemy = Vector3.Angle(playerCamera.transform.forward, directionToEnemy);
 
         // Get the player's field of view angle
-        float playerFOV = player.GetComponentInChildren<Camera>().fieldOfView;
+        float playerFOV = playerCamera.fieldOfView;
 
         // Check if angle to enemy is within half of the player's FOV angle
         return angleToEnemy <= playerFOV * 0.5f;
     }
+
 
 }

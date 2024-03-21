@@ -20,7 +20,7 @@ public class BatterySystem : MonoBehaviour
         //Debug.Log(shiftingText);
         //batteryText.text = shiftingText;
 
-        batteryText.text = "IIIIIII";
+        batteryText.text = "IIIII";
     }
 
     // Update is called once per frame
