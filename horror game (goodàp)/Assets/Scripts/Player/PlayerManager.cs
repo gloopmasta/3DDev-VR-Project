@@ -44,6 +44,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private GameObject med;
+    [SerializeField] private GameObject knife;
     [Space(10)]
 
     [Header("Child objects")]
@@ -178,36 +179,62 @@ public class PlayerManager : MonoBehaviour
     }
     public void Stab()
     {
-
+        switch (state)
+        {
+            case PlayerState.AwakeAndSane:
+                
+                return;
+            case PlayerState.Hallucinating:
+                
+                return;
+            case PlayerState.Dreaming:
+                state = PlayerState.AwakeAndSane;
+                return;
+        }
     }
 
 
     private void OnLeftClick1()
     {
-        Debug.Log("                                                                 AAAAAAAAAAAAleft click 1");
         CheckWatch();
     }
     private void OnLeftClick2()
     {
-        Debug.Log("                                                                 AAAAAAAAAAAAleft click 2");
         CheckWatch();
     }
-    private void OnRightClick1()
+
+
+    //                                                              RIGHT BUTTON 1
+    public void OnRightClick1Pressed()
     {
-        Debug.Log("                                                                 RIGHT click 1");
+        if (!med.activeInHierarchy)
+        {
+            //rightHandMesh.SetActive(false);
+            knife.SetActive(true);
+        }
     }
+
+    public void OnRightClick1Released()
+    {
+        //rightHandMesh.SetActive(true);
+        knife.SetActive(false);
+    }
+
+
+
+    //                                                              RIGHT BUTTON 2
     public void OnRightClick2Pressed()
     {
-        if (medsCount > 0)
+        if (medsCount > 0 && !knife.activeInHierarchy)
         {
-            rightHandMesh.SetActive(false);
+            //rightHandMesh.SetActive(false);
             med.SetActive(true);
         }
     }
 
     public void OnRightClick2Released()
     {
-        rightHandMesh.SetActive(true);
+        //rightHandMesh.SetActive(true);
         med.SetActive(false);
     }
 
