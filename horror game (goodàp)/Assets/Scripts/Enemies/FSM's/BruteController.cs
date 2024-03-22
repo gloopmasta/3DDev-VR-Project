@@ -38,7 +38,6 @@ public class BruteController : MonoBehaviour
 
         transform.position = randomSpawnPoint.position;
         Debug.Log($"SPAWNPOINT SET, distance: {Vector3.Distance(playerPos.position, randomSpawnPoint.position)}");
-
     }
 
     private IEnumerator CycleScripts()

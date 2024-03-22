@@ -34,10 +34,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform playerPos;
     [SerializeField] float minimumSpawnDistance = 15f;
 
-    [Header("Enemies")]
+    [Header("Enemies and player")]
     [SerializeField] GameObject stalker;
     [SerializeField] GameObject jeeper;
     [SerializeField] GameObject brute;
+    [SerializeField] GameObject player;
+
 
     PlayerManager playerManager;
 
@@ -56,12 +58,21 @@ public class GameManager : MonoBehaviour
         playerManager.ResetValues();
         playerManager.TeleportPlayerToRandomTarget();
     }
-    public void EndGame(bool playerDied)
+    public void EndGame(int picCount, int medCount, bool playerDied)
     {
-        if (playerDied)
+        //player.SetActive(false);//disable player
+
+        if (playerDied) //update playerdied for text at the end
         {
             playerIsDead = true;
         }
+        else
+        {
+            playerIsDead = false;
+        }
+
+        CalculateScore(picCount, medCount, playerDied); //wirte IO
+
         SceneManager.LoadScene("EndScene");
     }
     
@@ -78,7 +89,7 @@ public class GameManager : MonoBehaviour
         return randomSpawnPoint;
     }
 
-    public void CalculateScore(int picsCount, int medsCount, bool isAlive)
+    public void CalculateScore(int picsCount, int medsCount, bool playerDied)
     {
         Debug.Log("CalculateScore() script called");
         int score = 0;
@@ -91,11 +102,11 @@ public class GameManager : MonoBehaviour
         {
             score += 500;
         }
-        if (isAlive)
+        if (!playerDied)
         {
             score += 5000;
         }
 
-        FileManager.GetInstance().WriteAllData(score);
+        FileManager.GetInstance().WriteAllData(score, playerDied);
     }
 }

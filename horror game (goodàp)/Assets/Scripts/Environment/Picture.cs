@@ -6,10 +6,10 @@ public class Picture : MonoBehaviour
 {
     public void TouchPicture()
     {
-        PlayerManager.Instance.PictureCollected();
     }
     public void DeletePicture()
     {
+        PlayerManager.Instance.PictureCollected();
         Destroy(gameObject);
     }
 }
