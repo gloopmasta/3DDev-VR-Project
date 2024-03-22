@@ -28,17 +28,17 @@ public class FileManager
 
 
     //IO
-    public void WriteAllData(int score)
+    public void WriteAllData(int score, bool playerDied)
     {
         Debug.Log("WriteAllData() script called");
-        //PREVIOUS SCORE
+        //Last SCORE
         if (PlayerPrefs.HasKey("Current Score"))
         {
-            PlayerPrefs.SetInt("Previous Score", PlayerPrefs.GetInt("Current Score")); //Previous score becomes the last current score
+            PlayerPrefs.SetInt("Last Score", PlayerPrefs.GetInt("Current Score")); //Last score becomes the last current score
         }
         else //if it's not the first time you played (current score doesn't exist yet)
         {
-            PlayerPrefs.SetInt("Previous Score", 0); //make previous score 0
+            PlayerPrefs.SetInt("Last Score", 0); //make Last score 0
         }
 
         
@@ -57,9 +57,21 @@ public class FileManager
             PlayerPrefs.SetInt("High Score", PlayerPrefs.GetInt("Current Score"));//set highscore to currentscore value
         }
 
+        //DEATH STATUS
+        if (playerDied)
+        {
+            PlayerPrefs.SetString("Player Status", "dead"); //set status to dead
+        }
+        else
+        {
+            PlayerPrefs.SetString("Player Status", "alive"); //set status to yalive
+        }
+        
+
         PlayerPrefs.Save();
-        Debug.Log("Previous Score: " + PlayerPrefs.GetInt("Previous Score"));
+        Debug.Log("Last Score: " + PlayerPrefs.GetInt("Last Score"));
         Debug.Log("Current Score: " + PlayerPrefs.GetInt("Current Score"));
         Debug.Log("High Score: " + PlayerPrefs.GetInt("High Score"));
+        Debug.Log("Status: " + PlayerPrefs.GetInt("Player Status"));
     }
 }

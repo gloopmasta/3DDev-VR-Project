@@ -15,6 +15,7 @@ public class JeeperController : MonoBehaviour
     [Header("idk")]
     [SerializeField] Transform player;
     [SerializeField] bool lockedOnToPlayer;
+    [SerializeField] Transform[] spawnPoints;
     [Space(10)]
 
     [Header("Zone system")]                                     //Zone Detection
@@ -23,6 +24,8 @@ public class JeeperController : MonoBehaviour
 
     [SerializeField] float timeInterval = 1f;
     private float timeSinceLastActivation = 0.0f;
+
+    float minimumSpawnDistance = 20f;
 
     private void Start()
     {
@@ -45,7 +48,7 @@ public class JeeperController : MonoBehaviour
             if (timeSinceLastActivation >= timeInterval)
             {
                 CheckSameZone(); //check same zone every second
-                Debug.Log("I'm checking the area rn");
+                //Debug.Log("I'm checking the area rn");
                 timeSinceLastActivation = 0.0f; //reset the times
             }
         }
@@ -61,7 +64,7 @@ public class JeeperController : MonoBehaviour
                 //check if the enemy can see the player
                 if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("Zone")) //if he sees a zone or player act normal
                 {
-                    Debug.Log("LOOKIGN AT PLAYER (look-nolook behaviours should be working rn)");
+                    //Debug.Log("LOOKIGN AT PLAYER (look-nolook behaviours should be working rn)");
                     if (IsPlayerLookingAtEnemy()) //if the player is looking at the enemy
                     {
                         runToPlayerScript.enabled = false;
@@ -76,7 +79,7 @@ public class JeeperController : MonoBehaviour
                 }
                 else //if the raycast doesn't hit the player anymore
                 {
-                    Debug.Log($"The Enemy sees: {hit.collider.gameObject.name} RUNNING TO PLAYER");
+                    //Debug.Log($"The Enemy sees: {hit.collider.gameObject.name} RUNNING TO PLAYER");
                     runToPlayerScript.enabled = true;
                     freezeScript.enabled = false;
                 }
@@ -84,6 +87,20 @@ public class JeeperController : MonoBehaviour
         }
 
 
+    }
+
+    private void OnEnable()
+    {
+        Transform randomSpawnPoint;
+        do
+        {
+            randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            Debug.Log($"distance was too short: {Vector3.Distance(player.position, randomSpawnPoint.position)}   the cube: {randomSpawnPoint}");
+
+        } while (Vector3.Distance(player.position, randomSpawnPoint.position) < minimumSpawnDistance);
+
+        transform.position = randomSpawnPoint.position;
+        Debug.Log($"SPAWNPOINT SET, distance: {Vector3.Distance(player.position, randomSpawnPoint.position)}");
     }
 
     private void OnTriggerEnter(Collider other)

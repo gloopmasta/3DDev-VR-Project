@@ -61,6 +61,7 @@ public class PlayerManager : MonoBehaviour
 
     private bool watchActive = false;
     GameManager gameManager;
+    private bool initialized = false;
 
 
 
@@ -77,6 +78,8 @@ public class PlayerManager : MonoBehaviour
 
         gameManager = GameManager.GetInstance(); //instantiate gamemanager 
         currentZones = new List<string>();
+
+        initialized = true;
     }
     
     
@@ -103,6 +106,12 @@ public class PlayerManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //prevent from being called too much when everything is loading
+        if (!initialized) 
+        {
+            return;
+        }
+
         if (other.CompareTag("Zone")) //If enter new zone
         {
             //Update current zone
@@ -113,13 +122,14 @@ public class PlayerManager : MonoBehaviour
             //Chance to switch state
             if (state == PlayerState.AwakeAndSane)
             {
-                int randomInt = Random.Range(1, 9);//  1/4 chance to switch state  either dreaming or hallucinating
+                int randomInt = Random.Range(1, 17);//  1/8 chance to switch state  either dreaming or hallucinating
                 if (randomInt == 7)
                 {
                     StateChange(PlayerState.Dreaming);
                 }
                 if (randomInt == 8)
                 {
+                    Debug.Log("Why does it do this");
                     StateChange(PlayerState.Hallucinating);
                 }
             }
@@ -127,7 +137,8 @@ public class PlayerManager : MonoBehaviour
         }
         if (other.CompareTag("Enemy")) //ENEMY COLLISION
         {
-            gameManager.EndGame(true);
+            Debug.Log("PLAYER: died because of an enemy attack");
+            GameManager.GetInstance().EndGame(pictureCount, medsCount, true);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -169,10 +180,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void Die()
-    {
-        GameManager.GetInstance().CalculateScore(pictureCount, medsCount, false);
-    }
+    //public void Die()
+    //{
+    //    GameManager.GetInstance().CalculateScore(pictureCount, medsCount, false);
+    //}
 
     void CheckWatch()
     {
@@ -214,17 +225,17 @@ public class PlayerManager : MonoBehaviour
     
     public void MedsCollected()
     {
-        Debug.Log("if something happens here thats good news");
+        Debug.Log("PLAYER: med collected");
         medsCount++;
     }
 
     public void PictureCollected()
     {
         pictureCount++;
-        if (pictureCount >= 1)
+        if (pictureCount >= 5)
         {
             Debug.Log("Game won");
-            GameManager.GetInstance().CalculateScore(pictureCount, medsCount, true);
+            GameManager.GetInstance().EndGame(pictureCount, medsCount, false);
         }
     }
 
@@ -250,7 +261,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            gameManager.EndGame(true); //kill yourself if not
+            GameManager.GetInstance().EndGame(pictureCount, medsCount, true); //kill yourself if not
         }
     }
 

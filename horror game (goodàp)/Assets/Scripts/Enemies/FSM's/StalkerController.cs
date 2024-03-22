@@ -8,6 +8,8 @@ public class StalkerController : MonoBehaviour
     [SerializeField] float fleeDistance = 2f;
     [SerializeField] float runAwayTime = 5f;
     [SerializeField] Transform[] spawnPoints;
+    [SerializeField] Transform playerPos;
+    [SerializeField] float minimumSpawnDistance = 15f;
 
     [Space(10)]
 
@@ -39,6 +41,17 @@ public class StalkerController : MonoBehaviour
         freezeScript.enabled = false;
         runAwayScript.enabled = false;
 
+        //Random spawnpoint
+        Transform randomSpawnPoint;
+        do
+        {
+            randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            Debug.Log($"distance was too short: {Vector3.Distance(playerPos.position, randomSpawnPoint.position)}   the cube: {randomSpawnPoint}");
+
+        } while (Vector3.Distance(playerPos.position, randomSpawnPoint.position) < minimumSpawnDistance);
+
+        transform.position = randomSpawnPoint.position;
+        Debug.Log($"SPAWNPOINT SET, distance: {Vector3.Distance(playerPos.position, randomSpawnPoint.position)}");
     }
 
     // Update is called once per frame
@@ -62,7 +75,7 @@ public class StalkerController : MonoBehaviour
             if (timeSinceLastActivation >= timeInterval)
             {
                 CheckSameZone(); //check same zone every second
-                Debug.Log("I'm checking the area rn");
+                //Debug.Log("I'm checking the area rn");
                 timeSinceLastActivation = 0.0f; //reset the times
             }
         }
@@ -79,10 +92,7 @@ public class StalkerController : MonoBehaviour
 
         if (other.CompareTag("Player")) //If collide with player -> teleport to random
         {
-            Transform randomPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-
-            other.gameObject.transform.position= new Vector3(randomPoint.position.x, player.position.y, randomPoint.position.z); //get only x and z of random point
-
+            PlayerManager.Instance.TeleportPlayerToRandomTarget();
         }
     }
     private void OnTriggerExit(Collider other)
