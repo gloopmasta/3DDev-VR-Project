@@ -41,35 +41,13 @@ public class GameManager : MonoBehaviour
 
     PlayerManager playerManager;
 
+    public bool playerIsDead = false;
+
     private void Start()
     {
         playerManager = PlayerManager.Instance;
     }
 
-    //public void StateChange(PlayerState state)
-    //{
-    //    switch (state)
-    //    {
-    //        case PlayerState.AwakeAndSane:
-    //            Debug.Log("stalker spawned");
-    //            stalker.SetActive(true);
-    //            jeeper.SetActive(false);
-    //            brute.SetActive(false);
-    //            return;
-    //        case PlayerState.Dreaming:
-    //            Debug.Log("stalker spawned");
-    //            stalker.SetActive(false);
-    //            jeeper.SetActive(false);
-    //            brute.SetActive(true);
-    //            return;
-    //        case PlayerState.Hallucinating:
-    //            Debug.Log("stalker spawned");
-    //            stalker.SetActive(true);
-    //            jeeper.SetActive(false);
-    //            brute.SetActive(false);
-    //            return;
-    //    }
-    //}
 
 
     public void StartNewGame()
@@ -80,6 +58,10 @@ public class GameManager : MonoBehaviour
     }
     public void EndGame(bool playerDied)
     {
+        if (playerDied)
+        {
+            playerIsDead = true;
+        }
         SceneManager.LoadScene("EndScene");
     }
     
