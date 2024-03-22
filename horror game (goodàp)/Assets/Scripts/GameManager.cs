@@ -27,16 +27,62 @@ public class GameManager : MonoBehaviour
         return _instance;
     }
 
+
+
     [Header("Transforms")]
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] Transform playerPos;
     [SerializeField] float minimumSpawnDistance = 15f;
 
-    public void LoadScene(string name)
+    [Header("Enemies")]
+    [SerializeField] GameObject stalker;
+    [SerializeField] GameObject jeeper;
+    [SerializeField] GameObject brute;
+
+    PlayerManager playerManager;
+
+    private void Start()
     {
-        SceneManager.LoadScene(name);
+        playerManager = PlayerManager.Instance;
     }
 
+    //public void StateChange(PlayerState state)
+    //{
+    //    switch (state)
+    //    {
+    //        case PlayerState.AwakeAndSane:
+    //            Debug.Log("stalker spawned");
+    //            stalker.SetActive(true);
+    //            jeeper.SetActive(false);
+    //            brute.SetActive(false);
+    //            return;
+    //        case PlayerState.Dreaming:
+    //            Debug.Log("stalker spawned");
+    //            stalker.SetActive(false);
+    //            jeeper.SetActive(false);
+    //            brute.SetActive(true);
+    //            return;
+    //        case PlayerState.Hallucinating:
+    //            Debug.Log("stalker spawned");
+    //            stalker.SetActive(true);
+    //            jeeper.SetActive(false);
+    //            brute.SetActive(false);
+    //            return;
+    //    }
+    //}
+
+
+    public void StartNewGame()
+    {
+        SceneManager.LoadScene("HandScene");
+        playerManager.ResetValues();
+        playerManager.TeleportPlayerToRandomTarget();
+    }
+    public void EndGame(bool playerDied)
+    {
+        SceneManager.LoadScene("EndScene");
+    }
+    
     public Transform GenerateEnemySpawnPoint()
     {
         Transform randomSpawnPoint;

@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HandScene.unity
     guid: 8f294047726b8004d810298a133e2f4d
+  - enabled: 1
+    path: Assets/Scenes/EndScene.unity
+    guid: 8547ce6be8a9e7e47b0af5bbf92361d0
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 62cc128786bd5684cb1fe237669b7373,
       type: 2}

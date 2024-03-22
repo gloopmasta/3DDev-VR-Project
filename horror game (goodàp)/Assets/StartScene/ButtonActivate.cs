@@ -16,9 +16,14 @@ public class ButtonActivate : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void StartScene()
     {
         Debug.Log("Load new scene");
-        GameManager.GetInstance().LoadScene("HandScene");
+        GameManager.GetInstance().StartNewGame();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
     }
 }

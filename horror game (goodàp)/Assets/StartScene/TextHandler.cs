@@ -11,9 +11,9 @@ public class ScoresText : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        highScoreText.text = "HIGH SCORE: " + PlayerPrefs.GetInt("High Score");
-        currentScoreText.text = "CURRENT SCORE: " + PlayerPrefs.GetInt("Current Score");
-        lastScoreText.text = "LAST SCORE: " + PlayerPrefs.GetInt("Last Score");
+        highScoreText.text = "HIGH SCORE " + PlayerPrefs.GetInt("High Score");
+        currentScoreText.text = "CURRENT SCORE " + PlayerPrefs.GetInt("Current Score");
+        lastScoreText.text = "LAST SCORE " + PlayerPrefs.GetInt("Last Score");
     }
 
     // Update is called once per frame
