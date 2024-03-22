@@ -38,53 +38,96 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private int batteryLevel;
     [SerializeField] public int pictureCount;
     [SerializeField] public int medsCount;
-    [SerializeField] private SphereCollider sphereCollider;
     [SerializeField] private PlayerState state;
     [Space(10)]
 
-    [Header("Prefabs")]
-    [SerializeField] private GameObject med;
-    [SerializeField] private GameObject knife;
+    [Header("Targets")]
+    [SerializeField] Transform[] targets;
     [Space(10)]
 
     [Header("Child objects")]
     [SerializeField] GameObject rightHandMesh;
+    [SerializeField] private GameObject med;
+    [SerializeField] private GameObject knife;
     [Space(10)]
+
+    [Header("Enemies")]
+    [SerializeField] GameObject stalker;
+    [SerializeField] GameObject jeeper;
+    [SerializeField] GameObject brute;
 
     [Header("Zone system")]                                     //Zone Detection
     [SerializeField] private List<string> currentZones;
 
     private bool watchActive = false;
+    GameManager gameManager;
+
 
 
     void Start()
     {
-        batteryLevel = 5;
-        medsCount = 2;
-        pictureCount = 0;
-        state = PlayerState.AwakeAndSane;
+        //batteryLevel = 5;
+        //medsCount = 2;
+        //pictureCount = 0;
+        //state = PlayerState.AwakeAndSane;
 
+        ResetValues();
+        TeleportPlayerToRandomTarget();
+
+
+        gameManager = GameManager.GetInstance(); //instantiate gamemanager 
         currentZones = new List<string>();
-
-        sphereCollider.enabled = false;
     }
     
-    void Update()
+    
+    public void ResetValues()
     {
+        batteryLevel = 5;
+        medsCount = 3;
+        pictureCount = 0;
+        state = PlayerState.AwakeAndSane;
+    }
 
+    public void TeleportPlayerToRandomTarget()
+    {
+        Transform randomPoint = targets[Random.Range(0, targets.Length)];
+
+        transform.position = new Vector3(randomPoint.position.x, transform.position.y, randomPoint.position.z); //get only x and z of random point
+
+        Debug.Log("POSITIE SPELER: " + transform.position);
+        Debug.Log("CHOSEN POINT: " + randomPoint.position);
+
+        //random rotation player
+        transform.rotation = Quaternion.Euler(0, Random.rotation.y, 0);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Zone")) //If enter new zone
         {
-            currentZones.Add(other.gameObject.name); //update current zone
+            //Update current zone
+            currentZones.Add(other.gameObject.name); 
             Debug.Log($"{gameObject.name} entered zone: {currentZones[currentZones.Count - 1]}");
+
+
+            //Chance to switch state
+            if (state == PlayerState.AwakeAndSane)
+            {
+                int randomInt = Random.Range(1, 9);//  1/4 chance to switch state  either dreaming or hallucinating
+                if (randomInt == 7)
+                {
+                    StateChange(PlayerState.Dreaming);
+                }
+                if (randomInt == 8)
+                {
+                    StateChange(PlayerState.Hallucinating);
+                }
+            }
+
         }
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy")) //ENEMY COLLISION
         {
-            Debug.Log("                                             player is krill");
-            GameManager.GetInstance().LoadScene("StartScene");
+            gameManager.EndGame(true);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -97,6 +140,33 @@ public class PlayerManager : MonoBehaviour
     public List<string> GetCurrentZones()
     {
         return currentZones;
+    }
+
+    public void StateChange(PlayerState newState)
+    {
+        state = newState;
+
+        switch (state)
+        {
+            case PlayerState.AwakeAndSane:
+                Debug.Log("stalker spawned");
+                stalker.SetActive(true);
+                jeeper.SetActive(false);
+                brute.SetActive(false);
+                return;
+            case PlayerState.Dreaming:
+                Debug.Log("Brute spawned");
+                stalker.SetActive(false);
+                jeeper.SetActive(false);
+                brute.SetActive(true);
+                return;
+            case PlayerState.Hallucinating:
+                Debug.Log("Jeeper spawned");
+                stalker.SetActive(false);
+                jeeper.SetActive(true);
+                brute.SetActive(false);
+                return;
+        }
     }
 
     public void Die()
@@ -125,14 +195,14 @@ public class PlayerManager : MonoBehaviour
         clockScript.ShutOffWatch();
         watchActive = false;
     }
-    IEnumerator SoundHitboxActivate()
-    {
-        sphereCollider.enabled = true;
-        Debug.Log("hitbox enabled");
-        yield return new WaitForSeconds(2);
-        sphereCollider.enabled = false;
-        Debug.Log("hitbox disabled");
-    }
+    //IEnumerator SoundHitboxActivate()
+    //{
+    //    sphereCollider.enabled = true;
+    //    Debug.Log("hitbox enabled");
+    //    yield return new WaitForSeconds(2);
+    //    sphereCollider.enabled = false;
+    //    Debug.Log("hitbox disabled");
+    //}
 
     public void BatteryCollected()
     {
@@ -163,33 +233,24 @@ public class PlayerManager : MonoBehaviour
     {
         medsCount--;
 
-        switch (state)
+        if (state == PlayerState.Hallucinating)
         {
-            case PlayerState.AwakeAndSane:
-                Debug.Log("You're not hallucinating, the medication had no effect!");
-                return;
-            case PlayerState.Dreaming:
-                Debug.Log("You're dreaming, the medication had no effect!");
-                return;
-            case PlayerState.Hallucinating:
-                Debug.Log("You're hallucinating, the medication worked!");
-                state = PlayerState.AwakeAndSane;
-                return;
+            StateChange(PlayerState.AwakeAndSane);//alert the method that state has changed
+        }
+        else
+        {
+            Debug.Log("Player took a med but it had no effect! Meds: " + medsCount);
         }
     }
     public void Stab()
     {
-        switch (state)
+        if (state == PlayerState.Dreaming)
         {
-            case PlayerState.AwakeAndSane:
-                
-                return;
-            case PlayerState.Hallucinating:
-                
-                return;
-            case PlayerState.Dreaming:
-                state = PlayerState.AwakeAndSane;
-                return;
+            StateChange(PlayerState.AwakeAndSane); //wake up if dreaming
+        }
+        else
+        {
+            gameManager.EndGame(true); //kill yourself if not
         }
     }
 
