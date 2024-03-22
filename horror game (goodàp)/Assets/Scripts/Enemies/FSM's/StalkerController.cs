@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StalkerController : MonoBehaviour
 {
+    [SerializeField] Animator animator;
     [SerializeField] Transform player;
     [SerializeField] float fleeDistance = 2f;
     [SerializeField] float runAwayTime = 5f;
@@ -37,6 +38,7 @@ public class StalkerController : MonoBehaviour
 
     private void OnEnable()
     {
+        animator.SetInteger("AnimationState", 1); //set animation to walking
         wanderScript.enabled = true;
         freezeScript.enabled = false;
         runAwayScript.enabled = false;
@@ -112,6 +114,7 @@ public class StalkerController : MonoBehaviour
                 if (enemyZone == playerZone) //if enemy and player in same zone
                 {
                     //Enable freeze script
+                    animator.SetInteger("AnimationState", 2);
                     wanderScript.enabled = false;
                     freezeScript.enabled = true;
 
@@ -122,6 +125,7 @@ public class StalkerController : MonoBehaviour
         }
 
         Debug.Log("No longer in same hall -> wander instead of freeze");
+        animator.SetInteger("AnimationState", 1);
         freezeScript.enabled = false;
         wanderScript.enabled = true;
         runAwayScript.enabled = false;
@@ -132,12 +136,14 @@ public class StalkerController : MonoBehaviour
     private IEnumerator RunAwayForSeconds()
     {
         //all scripts false except runaway
+        animator.SetInteger("AnimationState", 3);
         wanderScript.enabled = false;
         freezeScript.enabled = false;
         runAwayScript.enabled = true;
 
         yield return new WaitForSeconds(runAwayTime);
 
+        animator.SetInteger("AnimationState", 1);
         runAwayScript.enabled = false; //start wandering again after 5 seconds
         wanderScript.enabled = true;
     }

@@ -16,6 +16,7 @@ public class JeeperController : MonoBehaviour
     [SerializeField] Transform player;
     [SerializeField] bool lockedOnToPlayer;
     [SerializeField] Transform[] spawnPoints;
+    [SerializeField] Animator animator;
     [Space(10)]
 
     [Header("Zone system")]                                     //Zone Detection
@@ -34,6 +35,7 @@ public class JeeperController : MonoBehaviour
 
         lockedOnToPlayer = false;
 
+        animator.SetInteger("AnimationState", 1);
         wanderScript.enabled = true;
         runToPlayerScript.enabled = false;
         freezeScript.enabled = false;
@@ -67,11 +69,14 @@ public class JeeperController : MonoBehaviour
                     //Debug.Log("LOOKIGN AT PLAYER (look-nolook behaviours should be working rn)");
                     if (IsPlayerLookingAtEnemy()) //if the player is looking at the enemy
                     {
+                        animator.SetInteger("AnimationState", 2);
                         runToPlayerScript.enabled = false;
                         freezeScript.enabled = true;
                     }
                     else
                     {
+                        
+                        animator.SetInteger("AnimationState", 3);
                         runToPlayerScript.enabled = true;
                         freezeScript.enabled = false;
                     }
@@ -80,6 +85,8 @@ public class JeeperController : MonoBehaviour
                 else //if the raycast doesn't hit the player anymore
                 {
                     //Debug.Log($"The Enemy sees: {hit.collider.gameObject.name} RUNNING TO PLAYER");
+                    
+                    animator.SetInteger("AnimationState", 3);
                     runToPlayerScript.enabled = true;
                     freezeScript.enabled = false;
                 }
@@ -132,6 +139,7 @@ public class JeeperController : MonoBehaviour
                     //Debug.Log("Enemy and player in the same zone");
 
                     //Enable run script
+                    animator.SetInteger("AnimationState", 3);
                     wanderScript.enabled = false;
                     runToPlayerScript.enabled = true;
 

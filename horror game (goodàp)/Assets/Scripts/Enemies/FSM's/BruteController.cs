@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BruteController : MonoBehaviour
 {
+    [SerializeField] Animator animator;
+
     [Header("Behaviour Scripts")]
     [SerializeField] RunToNextPoint runToNextPointScript;
     [SerializeField] Countdown countdownScript;
@@ -45,6 +47,7 @@ public class BruteController : MonoBehaviour
         while (true)
         {
             // Enable the Countdown script for 2 seconds
+            animator.SetBool("isRunning", false);
             countdownScript.enabled = true;
             yield return new WaitForSeconds(2f);
 
@@ -52,6 +55,7 @@ public class BruteController : MonoBehaviour
             countdownScript.enabled = false;
 
             // Enable the RunToNextPoint script until it disables itself
+            animator.SetBool("isRunning", true);
             runToNextPointScript.enabled = true;
             yield return new WaitUntil(() => !runToNextPointScript.enabled);
         }
