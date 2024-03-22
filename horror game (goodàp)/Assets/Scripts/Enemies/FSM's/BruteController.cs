@@ -5,6 +5,7 @@ using UnityEngine;
 public class BruteController : MonoBehaviour
 {
     [SerializeField] Animator animator;
+    [SerializeField] AudioSource source;
 
     [Header("Behaviour Scripts")]
     [SerializeField] RunToNextPoint runToNextPointScript;
@@ -56,6 +57,7 @@ public class BruteController : MonoBehaviour
 
             // Enable the RunToNextPoint script until it disables itself
             animator.SetBool("isRunning", true);
+            source.Play();
             runToNextPointScript.enabled = true;
             yield return new WaitUntil(() => !runToNextPointScript.enabled);
         }
