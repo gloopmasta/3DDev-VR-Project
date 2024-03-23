@@ -49,6 +49,7 @@ public class BruteController : MonoBehaviour
         {
             // Enable the Countdown script for 2 seconds
             animator.SetBool("isRunning", false);
+            source.Stop();
             countdownScript.enabled = true;
             yield return new WaitForSeconds(2f);
 

@@ -6,6 +6,12 @@ public class JeeperController : MonoBehaviour
 {
     private PlayerManager playerManager;
 
+    [Header("Sounds")]
+    [SerializeField] AudioSource source;
+    [SerializeField] AudioClip breathingSound;
+    [SerializeField] AudioClip runningSound;
+    [Space(10)]
+
     [Header("Behaviour Scripts")]
     [SerializeField] Wander wanderScript;
     [SerializeField] RunToPlayer runToPlayerScript;
@@ -36,6 +42,8 @@ public class JeeperController : MonoBehaviour
         lockedOnToPlayer = false;
 
         animator.SetInteger("AnimationState", 1);
+        source.clip = breathingSound;
+        source.Play();
         wanderScript.enabled = true;
         runToPlayerScript.enabled = false;
         freezeScript.enabled = false;
@@ -70,12 +78,15 @@ public class JeeperController : MonoBehaviour
                     if (IsPlayerLookingAtEnemy()) //if the player is looking at the enemy
                     {
                         animator.SetInteger("AnimationState", 2);
+                        source.Stop();
                         runToPlayerScript.enabled = false;
                         freezeScript.enabled = true;
                     }
                     else
                     {
-                        
+                        //RUN TO PLAYER
+                        source.clip = runningSound;
+                        source.Play();
                         animator.SetInteger("AnimationState", 3);
                         runToPlayerScript.enabled = true;
                         freezeScript.enabled = false;
@@ -85,7 +96,8 @@ public class JeeperController : MonoBehaviour
                 else //if the raycast doesn't hit the player anymore
                 {
                     //Debug.Log($"The Enemy sees: {hit.collider.gameObject.name} RUNNING TO PLAYER");
-                    
+                    source.clip = runningSound;
+                    source.Play();
                     animator.SetInteger("AnimationState", 3);
                     runToPlayerScript.enabled = true;
                     freezeScript.enabled = false;

@@ -359,37 +359,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1550514412580984892, guid: 90b44da7f0e534f4683f71e04a451275, type: 3}
---- !u!1 &4178333645366769456
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 292417531760217538}
-  m_Layer: 0
-  m_Name: attach point
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &292417531760217538
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4178333645366769456}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.0420248, y: -0, z: -0, w: 0.99911666}
-  m_LocalPosition: {x: -0.78, y: 0, z: 1.08}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5139351444504517053}
-  m_LocalEulerAnglesHint: {x: -4.817, y: 0, z: 0}
 --- !u!1 &5827693938628136614
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,8 +393,7 @@ Transform:
   m_LocalPosition: {x: 0.13539109, y: 0.69599986, z: -0.24061966}
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 292417531760217538}
+  m_Children: []
   m_Father: {fileID: 7958668740347819219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1775217038244757105
@@ -593,7 +561,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8119858925288424431}
+        m_TargetAssemblyTypeName: MedScript, Assembly-CSharp
+        m_MethodName: MedLetGo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -642,7 +622,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  m_AttachTransform: {fileID: 292417531760217538}
+  m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
   m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1

@@ -28,7 +28,16 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    
+    [Header("Audio")]                                             //scripts
+    [SerializeField] AudioSource source;
+    [SerializeField] AudioSource watch;
+    [SerializeField] AudioClip gulp;
+    [SerializeField] AudioClip collect;
+    [SerializeField] AudioClip knifeShing;
+    [SerializeField] AudioClip knifeStab;
+
+    [Space(10)]
+
     [Header("Scripts")]                                             //scripts
     [SerializeField] private ClockSystem clockScript;
     [SerializeField] private BatterySystem batteryScript;
@@ -122,14 +131,32 @@ public class PlayerManager : MonoBehaviour
             //Chance to switch state
             if (state == PlayerState.AwakeAndSane)
             {
-                int randomInt = Random.Range(1, 17);//  1/8 chance to switch state  either dreaming or hallucinating
+                int randomInt = 0; //geen pictures -> geen enemies
+                if (pictureCount == 1) //KANS VERGROOT OP SPAWN NAARMATE PICTURES COLLECTED
+                {
+                    randomInt = Random.Range(1, 33);
+                }
+                else if (pictureCount == 2)
+                {
+                    randomInt = Random.Range(1, 26);
+                }
+                else if (pictureCount == 3)
+                {
+                    randomInt = Random.Range(1, 21);
+                }
+                else if (pictureCount >= 4)
+                {
+                    randomInt = Random.Range(1, 16);
+                }
+
+
+                //  1/8 chance to switch state  either dreaming or hallucinating
                 if (randomInt == 7)
                 {
                     StateChange(PlayerState.Dreaming);
                 }
                 if (randomInt == 8)
                 {
-                    Debug.Log("Why does it do this");
                     StateChange(PlayerState.Hallucinating);
                 }
             }
@@ -180,15 +207,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    //public void Die()
-    //{
-    //    GameManager.GetInstance().CalculateScore(pictureCount, medsCount, false);
-    //}
+    
 
     void CheckWatch()
     {
         if (!watchActive && batteryLevel > 0)
         {
+            watch.Play();
             StartCoroutine(WatchLogic());
         }
     }
@@ -225,12 +250,16 @@ public class PlayerManager : MonoBehaviour
     
     public void MedsCollected()
     {
+        source.clip = collect;
+        source.Play();
         Debug.Log("PLAYER: med collected");
         medsCount++;
     }
 
     public void PictureCollected()
     {
+        source.clip = collect;
+        source.Play();
         pictureCount++;
         if (pictureCount >= 5)
         {
@@ -244,6 +273,9 @@ public class PlayerManager : MonoBehaviour
     {
         medsCount--;
 
+        source.clip = gulp;
+        source.Play();
+
         if (state == PlayerState.Hallucinating)
         {
             StateChange(PlayerState.AwakeAndSane);//alert the method that state has changed
@@ -255,6 +287,9 @@ public class PlayerManager : MonoBehaviour
     }
     public void Stab()
     {
+        source.clip = knifeStab;
+        source.Play();
+
         if (state == PlayerState.Dreaming)
         {
             StateChange(PlayerState.AwakeAndSane); //wake up if dreaming
@@ -281,6 +316,8 @@ public class PlayerManager : MonoBehaviour
     {
         if (!med.activeInHierarchy)
         {
+            source.clip = knifeShing;
+            source.Play();
             //rightHandMesh.SetActive(false);
             knife.SetActive(true);
         }
@@ -299,6 +336,8 @@ public class PlayerManager : MonoBehaviour
     {
         if (medsCount > 0 && !knife.activeInHierarchy)
         {
+            source.clip = collect;
+            source.Play();
             //rightHandMesh.SetActive(false);
             med.SetActive(true);
         }

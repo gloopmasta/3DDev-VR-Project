@@ -11,6 +11,7 @@ public class StalkerController : MonoBehaviour
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] Transform playerPos;
     [SerializeField] float minimumSpawnDistance = 15f;
+    [SerializeField] AudioSource source;
 
     [Space(10)]
 
@@ -115,6 +116,7 @@ public class StalkerController : MonoBehaviour
                 {
                     //Enable freeze script
                     animator.SetInteger("AnimationState", 2);
+                    source.Play();
                     wanderScript.enabled = false;
                     freezeScript.enabled = true;
 
