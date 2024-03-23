@@ -692,8 +692,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highScoreText: {fileID: 203976301}
-  currentScoreText: {fileID: 295933216}
-  lastScoreText: {fileID: 54751428}
+  currentScoreText: {fileID: 54751428}
+  lastScoreText: {fileID: 295933216}
   diedText: {fileID: 295933216}
 --- !u!114 &401151770
 MonoBehaviour:

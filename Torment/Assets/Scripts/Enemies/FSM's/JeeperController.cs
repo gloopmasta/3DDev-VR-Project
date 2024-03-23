@@ -152,6 +152,8 @@ public class JeeperController : MonoBehaviour
 
                     //Enable run script
                     animator.SetInteger("AnimationState", 3);
+                    source.clip = runningSound;
+                    source.Play();
                     wanderScript.enabled = false;
                     runToPlayerScript.enabled = true;
 
